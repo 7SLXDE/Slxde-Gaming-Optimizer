@@ -1,6 +1,6 @@
 # =====================================================
 # Slxde Gaming Optimizer
-# v0.6
+# v0.6.1
 # =====================================================
 
 . "$PSScriptRoot\Modules\Core.ps1"
@@ -13,7 +13,7 @@
 . "$PSScriptRoot\Modules\RestorePoint.ps1"
 . "$PSScriptRoot\Modules\Tweaks.ps1"
 
-Write-Log "Application Started"
+Write-Log "Application started"
 
 while ($true) {
 
@@ -25,7 +25,8 @@ while ($true) {
 
     Write-Host "  1. Analyze PC"
     Write-Host "  2. Create Restore Point"
-    Write-Host "  3. Disable Game DVR"
+    Write-Host "  3. Apply Safe Gaming Tweaks"
+    Write-Host "  4. View Latest Log"
     Write-Host ""
     Write-Host "  0. Exit"
     Write-Host ""
@@ -35,53 +36,37 @@ while ($true) {
     switch ($Choice) {
 
         "1" {
-            Write-Log "Analyze PC Selected"
+            Write-Log "Analyze PC selected"
             Get-GamingAnalysis
         }
 
         "2" {
-            Write-Log "Create Restore Point Selected"
-
+            Write-Log "Create Restore Point selected"
             Show-Banner
             Write-Host ""
             Write-Host "Creating restore point..." -ForegroundColor Yellow
             Write-Host ""
-
             $Result = New-OptimizerRestorePoint
-
             if ($Result -eq "Success") {
                 Write-Host "Restore point created successfully." -ForegroundColor Green
-            }
-            else {
+            } else {
                 Write-Host "Restore point failed." -ForegroundColor Red
                 Write-Host "System Protection may be disabled on this drive." -ForegroundColor Yellow
             }
-
             Pause-App
         }
 
         "3" {
-            Write-Log "Disable Game DVR Selected"
+            Write-Log "Apply Safe Gaming Tweaks selected"
+            Invoke-SafeGamingTweaks
+        }
 
-            Show-Banner
-            Write-Host ""
-            Write-Host "Disabling Game DVR..." -ForegroundColor Yellow
-            Write-Host ""
-
-            $Result = Disable-GameDVR
-
-            if ($Result -eq "Success") {
-                Write-Host "Game DVR disabled successfully." -ForegroundColor Green
-            }
-            else {
-                Write-Host "Failed to disable Game DVR." -ForegroundColor Red
-            }
-
-            Pause-App
+        "4" {
+            Show-LatestLog
         }
 
         "0" {
-            Write-Log "Application Closed"
+            Write-Log "Application closed"
             break
         }
 

@@ -2,14 +2,12 @@
 # Core.ps1
 # =====================================================
 
-function Test-Administrator {
-    $CurrentUser = New-Object Security.Principal.WindowsPrincipal(
-        [Security.Principal.WindowsIdentity]::GetCurrent()
-    )
-
-    return $CurrentUser.IsInRole(
-        [Security.Principal.WindowsBuiltInRole]::Administrator
-    )
+function Show-Banner {
+    Clear-Host
+    Write-Host ""
+    Write-Host "=============================================================" -ForegroundColor Cyan
+    Write-Host "              Slxde Gaming Optimizer v0.6.1" -ForegroundColor Green
+    Write-Host "=============================================================" -ForegroundColor Cyan
 }
 
 function Pause-App {
@@ -17,26 +15,11 @@ function Pause-App {
     Read-Host "Press ENTER to continue"
 }
 
-function Get-WindowsReleaseName {
-    try {
-        $DisplayVersion = Get-ItemPropertyValue `
-            -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" `
-            -Name "DisplayVersion" `
-            -ErrorAction Stop
-
-        return $DisplayVersion
-    }
-    catch {
-        try {
-            $ReleaseId = Get-ItemPropertyValue `
-                -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" `
-                -Name "ReleaseId" `
-                -ErrorAction Stop
-
-            return $ReleaseId
-        }
-        catch {
-            return "Unknown"
-        }
-    }
+function Test-Administrator {
+    $CurrentUser = New-Object Security.Principal.WindowsPrincipal(
+        [Security.Principal.WindowsIdentity]::GetCurrent()
+    )
+    return $CurrentUser.IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator
+    )
 }
