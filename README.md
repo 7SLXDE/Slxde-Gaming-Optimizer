@@ -4,7 +4,7 @@ A Windows gaming optimization utility built with PowerShell.
 
 ## Version
 
-Current build: **v0.7.7**
+Current build: **v0.7.8**
 
 ## Features
 
@@ -157,3 +157,13 @@ Some settings may require a restart or sign-out to fully apply.
   - USB selective suspend: Disabled
   - PCIe link state power management: Off where supported
 - Existing SLXDE PowerPlan is now re-used and re-optimized instead of creating duplicates.
+
+
+## v0.7.8
+
+### Safety Polish
+- Added clearer System File Check warning before running SFC.
+- Added clearer Windows Image Repair warning before running DISM.
+- DISM warning now explains it can look stuck at certain percentages.
+- Repair command windows now remind users to restart if repairs are made.
+- Minor restart wording polish.

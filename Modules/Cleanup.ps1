@@ -76,10 +76,46 @@ function Start-DiskCleanup {
     }
 }
 
+function Show-SfcWarning {
+    Show-Banner
+    Write-Host "System File Check" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "This will run:" -ForegroundColor Gray
+    Write-Host "  sfc /scannow" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "What to expect:" -ForegroundColor Yellow
+    Write-Host "  - Usually takes 5-20 minutes"
+    Write-Host "  - May pause before showing progress"
+    Write-Host "  - Checks and repairs Windows system files"
+    Write-Host "  - A new command window will open"
+    Write-Host ""
+    return Confirm-Action "Continue with System File Check?"
+}
+
+function Show-DismWarning {
+    Show-Banner
+    Write-Host "Windows Image Check and Repair" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "This will run:" -ForegroundColor Gray
+    Write-Host "  DISM /Online /Cleanup-Image /RestoreHealth" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "What to expect:" -ForegroundColor Yellow
+    Write-Host "  - Usually takes 10-30+ minutes"
+    Write-Host "  - Can look stuck at certain percentages"
+    Write-Host "  - Do not close it just because the percent has not moved"
+    Write-Host "  - Internet may be needed to download repair files"
+    Write-Host "  - A new command window will open"
+    Write-Host ""
+    Write-Host "Only close it if it has been stuck for a very long time." -ForegroundColor Red
+    Write-Host ""
+    return Confirm-Action "Continue with Windows Image Check and Repair?"
+}
+
 function Start-RepairCommandWindow {
     param(
         [string]$Title,
-        [string]$Command
+        [string]$Command,
+        [string]$ExtraMessage = ""
     )
 
     if (!(Assert-Admin)) { return "Failed" }
@@ -93,11 +129,23 @@ echo ============================================================
 echo.
 echo This can take several minutes.
 echo Do not close this window until it finishes.
+"@
+
+        if ($ExtraMessage -ne "") {
+            $Script += @"
+
+echo $ExtraMessage
+"@
+        }
+
+        $Script += @"
+
 echo.
 $Command
 echo.
 echo ============================================================
 echo Finished.
+echo If Windows repaired anything, restart your PC.
 echo ============================================================
 pause
 "@
@@ -117,19 +165,21 @@ pause
 }
 
 function Invoke-SystemFileCheck {
-    if (!(Confirm-Action "Run System File Check? This can take 10-20 minutes.")) { return "Cancelled" }
+    if (!(Show-SfcWarning)) { return "Cancelled" }
 
     return Start-RepairCommandWindow `
         -Title "Slxde Optimizer - System File Check" `
-        -Command "sfc /scannow"
+        -Command "sfc /scannow" `
+        -ExtraMessage "SFC may pause before showing progress."
 }
 
 function Invoke-WindowsImageRepair {
-    if (!(Confirm-Action "Run Windows Image Repair? This can take 10-30 minutes.")) { return "Cancelled" }
+    if (!(Show-DismWarning)) { return "Cancelled" }
 
     return Start-RepairCommandWindow `
         -Title "Slxde Optimizer - Windows Image Repair" `
-        -Command "DISM /Online /Cleanup-Image /RestoreHealth"
+        -Command "DISM /Online /Cleanup-Image /RestoreHealth" `
+        -ExtraMessage "DISM can look stuck at certain percentages. Let it run."
 }
 
 function Show-CleanupMenu {

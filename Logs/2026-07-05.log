@@ -191,3 +191,19 @@
 [2026-07-05 20:35:16] [INFO] SLXDE power plan settings applied
 [2026-07-05 20:35:16] [INFO] Existing SLXDE power plan activated and optimized
 [2026-07-05 20:35:59] [INFO] Creating restore point
+[2026-07-05 20:36:43] [INFO] Restore point created successfully
+[2026-07-05 20:36:43] [INFO] Creating/loading SLXDE power plan
+[2026-07-05 20:36:45] [INFO] SLXDE power plan settings applied
+[2026-07-05 20:36:45] [INFO] Existing SLXDE power plan activated and optimized
+[2026-07-05 20:36:45] [INFO] Windows appearance optimized
+[2026-07-05 20:36:45] [INFO] Background apps disabled
+[2026-07-05 20:36:45] [INFO] Location tracking disabled
+[2026-07-05 20:36:46] [INFO] USB power saving disabled
+[2026-07-05 20:36:46] [INFO] Startup delay disabled
+[2026-07-05 20:37:03] [INFO] Starting gaming analysis
+[2026-07-05 20:37:04] [INFO] Hardware info collected
+[2026-07-05 20:37:04] [INFO] Gaming analysis completed. Score: 100/100
+[2026-07-05 20:37:12] [INFO] Opened AMD shader cache folder: C:\Users\samsl\AppData\Local\AMD\DxCache
+[2026-07-05 20:39:43] [INFO] Application Started
+[2026-07-05 20:39:57] [INFO] Hardware info collected
+[2026-07-05 20:40:27] [INFO] Slxde Optimizer - System File Check launched in separate command window
