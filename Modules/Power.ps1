@@ -7,7 +7,8 @@ function Get-PowerPlan {
         $Output = powercfg /getactivescheme
         if ($Output -match '\((.+)\)') { return $Matches[1] }
         return "Unknown"
-    } catch { return "Unknown" }
+    }
+    catch { return "Unknown" }
 }
 
 function Test-UltimatePerformance {
@@ -15,5 +16,6 @@ function Test-UltimatePerformance {
         $Plans = powercfg /list
         if ($Plans -match "Ultimate Performance") { return $true }
         return $false
-    } catch { return $false }
+    }
+    catch { return $false }
 }

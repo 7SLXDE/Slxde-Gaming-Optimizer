@@ -8,7 +8,8 @@ function New-OptimizerRestorePoint {
         Checkpoint-Computer -Description "Slxde Gaming Optimizer Restore Point" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
         Write-Log "Restore point created successfully."
         return "Success"
-    } catch {
+    }
+    catch {
         Write-Log "Restore point failed: $($_.Exception.Message)" "ERROR"
         return "Failed"
     }
