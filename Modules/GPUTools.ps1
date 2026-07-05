@@ -1,5 +1,6 @@
 # =====================================================
 # GPUTools.ps1
+# GPU settings shortcuts / helpers
 # =====================================================
 
 function Open-GPUSettings {
@@ -21,33 +22,111 @@ function Open-NvidiaControlPanel {
 }
 
 function Open-AMDAdrenalin {
+    $Candidates = @(
+        "$env:ProgramFiles\AMD\CNext\CNext\RadeonSoftware.exe",
+        "$env:ProgramFiles\AMD\CNext\CNext\AMDSoftware.exe",
+        "$env:ProgramFiles\AMD\CNext\CNext\AMDRSServ.exe",
+        "${env:ProgramFiles(x86)}\AMD\CNext\CNext\RadeonSoftware.exe",
+        "${env:ProgramFiles(x86)}\AMD\CNext\CNext\AMDSoftware.exe"
+    )
+
+    foreach ($Path in $Candidates) {
+        if (Test-Path $Path) {
+            try {
+                Start-Process $Path
+                Write-Log "Opened AMD Adrenalin: $Path"
+                return "Opened"
+            }
+            catch {}
+        }
+    }
+
     try {
-        Start-Process "AMDSoftware.exe" -ErrorAction Stop
-        Write-Log "Opened AMD Adrenalin"
+        Start-Process "amd-software:" -ErrorAction Stop
+        Write-Log "Opened AMD Adrenalin via protocol"
         return "Opened"
     }
+    catch {}
+
+    try {
+        Start-Process "ms-settings:display-advancedgraphics"
+        Write-Log "AMD Adrenalin not found, opened Windows graphics settings instead"
+        return "Not Found - Opened Windows Graphics Settings"
+    }
     catch {
-        try {
-            Start-Process "RadeonSoftware.exe" -ErrorAction Stop
-            Write-Log "Opened AMD Radeon Software"
+        Write-Log "AMD software not found"
+        return "Not Found"
+    }
+}
+
+function Open-AMDShaderCacheFolder {
+    $Candidates = @(
+        "$env:LOCALAPPDATA\AMD\DxCache",
+        "$env:LOCALAPPDATA\AMD\GLCache"
+    )
+
+    foreach ($Path in $Candidates) {
+        if (Test-Path $Path) {
+            Start-Process explorer.exe $Path
+            Write-Log "Opened AMD shader cache folder: $Path"
             return "Opened"
         }
-        catch {
-            Write-Log "AMD software not found"
-            return "Not Found"
+    }
+
+    return "Not Found"
+}
+
+function Open-NvidiaShaderCacheFolder {
+    $Candidates = @(
+        "$env:LOCALAPPDATA\NVIDIA\DXCache",
+        "$env:LOCALAPPDATA\NVIDIA\GLCache",
+        "$env:ProgramData\NVIDIA Corporation\NV_Cache"
+    )
+
+    foreach ($Path in $Candidates) {
+        if (Test-Path $Path) {
+            Start-Process explorer.exe $Path
+            Write-Log "Opened NVIDIA shader cache folder: $Path"
+            return "Opened"
         }
     }
+
+    return "Not Found"
 }
 
 function Add-GameHighPerformancePrompt {
     Show-Banner
     Write-Host "Add Game EXE to High Performance GPU Preference" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Opening Windows Graphics Settings." -ForegroundColor Yellow
-    Write-Host "Browse to your game .exe and set GPU preference to High Performance." -ForegroundColor Yellow
+    Write-Host "Paste the full path to your game .exe." -ForegroundColor Yellow
+    Write-Host "Example: C:\Games\GameFolder\game.exe" -ForegroundColor DarkGray
     Write-Host ""
 
-    Open-GPUSettings | Out-Null
+    $Path = Read-Host "EXE path"
+
+    if (!(Test-Path $Path)) {
+        Write-Host "File not found." -ForegroundColor Red
+        Pause-App
+        return
+    }
+
+    try {
+        New-Item -Path "HKCU:\Software\Microsoft\DirectX\UserGpuPreferences" -Force | Out-Null
+        New-ItemProperty `
+            -Path "HKCU:\Software\Microsoft\DirectX\UserGpuPreferences" `
+            -Name $Path `
+            -Value "GpuPreference=2;" `
+            -PropertyType String `
+            -Force | Out-Null
+
+        Write-Log "Set high performance GPU preference for $Path"
+        Write-Host "High performance GPU preference added." -ForegroundColor Green
+    }
+    catch {
+        Write-Log "Failed to set GPU preference: $($_.Exception.Message)" "ERROR"
+        Write-Host "Failed." -ForegroundColor Red
+    }
+
     Pause-App
 }
 
@@ -61,6 +140,8 @@ function Show-GPUToolsMenu {
         Write-Host "  2. Open NVIDIA Control Panel"
         Write-Host "  3. Open AMD Adrenalin"
         Write-Host "  4. Add Game EXE to High Performance GPU List"
+        Write-Host "  5. Open NVIDIA Shader Cache Folder"
+        Write-Host "  6. Open AMD Shader Cache Folder"
         Write-Host ""
         Write-Host "  0. Back"
         Write-Host ""
@@ -72,6 +153,8 @@ function Show-GPUToolsMenu {
             "2" { Write-Status "NVIDIA Control Panel" (Open-NvidiaControlPanel) "Yellow"; Pause-App }
             "3" { Write-Status "AMD Adrenalin" (Open-AMDAdrenalin) "Yellow"; Pause-App }
             "4" { Add-GameHighPerformancePrompt }
+            "5" { Write-Status "NVIDIA Shader Cache" (Open-NvidiaShaderCacheFolder) "Yellow"; Pause-App }
+            "6" { Write-Status "AMD Shader Cache" (Open-AMDShaderCacheFolder) "Yellow"; Pause-App }
             "0" { return }
             default { Write-Host "Invalid option." -ForegroundColor Red; Pause-App }
         }

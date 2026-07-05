@@ -1,5 +1,6 @@
 # =====================================================
 # Power.ps1
+# Power plan tools
 # =====================================================
 
 function Get-PowerPlan {
@@ -19,23 +20,77 @@ function Test-UltimatePerformance {
     catch { return $false }
 }
 
+function Get-SlxdePowerPlanGuid {
+    try {
+        $Plans = powercfg /list
+        $Line = ($Plans | Select-String "SLXDE PowerPlan" | Select-Object -First 1).Line
+
+        if ($Line -match '([a-fA-F0-9\-]{36})') {
+            return $Matches[1]
+        }
+
+        return $null
+    }
+    catch {
+        return $null
+    }
+}
+
+function Set-SlxdePowerPlanSettings {
+    param(
+        [string]$Guid
+    )
+
+    try {
+        if (!$Guid) { return "Failed" }
+
+        # Make the plan active first so /change targets the correct plan.
+        powercfg /setactive $Guid | Out-Null
+
+        # Safe, visible powercfg shortcuts.
+        powercfg /change monitor-timeout-ac 0 | Out-Null
+        powercfg /change monitor-timeout-dc 0 | Out-Null
+        powercfg /change standby-timeout-ac 0 | Out-Null
+        powercfg /change standby-timeout-dc 0 | Out-Null
+        powercfg /change hibernate-timeout-ac 0 | Out-Null
+        powercfg /change hibernate-timeout-dc 0 | Out-Null
+        powercfg /change disk-timeout-ac 0 | Out-Null
+        powercfg /change disk-timeout-dc 0 | Out-Null
+
+        # Deeper settings. Output is suppressed because some builds hide/rename aliases.
+        cmd /c "powercfg -setacvalueindex $Guid SUB_SLEEP RTCWAKE 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex $Guid SUB_SLEEP RTCWAKE 0 >nul 2>nul"
+        cmd /c "powercfg -setacvalueindex $Guid SUB_SLEEP HYBRIDSLEEP 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex $Guid SUB_SLEEP HYBRIDSLEEP 0 >nul 2>nul"
+        cmd /c "powercfg -setacvalueindex $Guid SUB_USB USBSELECTIVE 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex $Guid SUB_USB USBSELECTIVE 0 >nul 2>nul"
+        cmd /c "powercfg -setacvalueindex $Guid SUB_PCIEXPRESS ASPM 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex $Guid SUB_PCIEXPRESS ASPM 0 >nul 2>nul"
+
+        powercfg /setactive $Guid | Out-Null
+
+        Write-Log "SLXDE power plan settings applied"
+        return "Success"
+    }
+    catch {
+        Write-Log "Failed to apply SLXDE power plan settings: $($_.Exception.Message)" "ERROR"
+        return "Failed"
+    }
+}
+
 function New-SlxdePowerPlan {
     if (!(Assert-Admin)) { return "Failed" }
 
     try {
-        Write-Log "Creating SLXDE power plan"
+        Write-Log "Creating/loading SLXDE power plan"
 
-        $ExistingPlans = powercfg /list
+        $ExistingGuid = Get-SlxdePowerPlanGuid
 
-        if ($ExistingPlans -match "SLXDE PowerPlan") {
-            $MatchLine = ($ExistingPlans | Select-String "SLXDE PowerPlan" | Select-Object -First 1).Line
-
-            if ($MatchLine -match '([a-fA-F0-9\-]{36})') {
-                $ExistingGuid = $Matches[1]
-                powercfg /setactive $ExistingGuid | Out-Null
-                Write-Log "Existing SLXDE power plan activated"
-                return "Success"
-            }
+        if ($ExistingGuid) {
+            powercfg /setactive $ExistingGuid | Out-Null
+            Set-SlxdePowerPlanSettings -Guid $ExistingGuid | Out-Null
+            Write-Log "Existing SLXDE power plan activated and optimized"
+            return "Success"
         }
 
         $DuplicateOutput = powercfg -duplicatescheme SCHEME_MIN
@@ -53,12 +108,9 @@ function New-SlxdePowerPlan {
         powercfg -changename $Guid "SLXDE PowerPlan" "Created by Slxde Gaming Optimizer" | Out-Null
         powercfg /setactive $Guid | Out-Null
 
-        # Safe USB selective suspend change. Other processor-specific settings vary by Windows build,
-        # so they are not forced here to avoid invalid parameter output.
-        powercfg /change monitor-timeout-ac 0 | Out-Null
-        powercfg /change standby-timeout-ac 0 | Out-Null
+        Set-SlxdePowerPlanSettings -Guid $Guid | Out-Null
 
-        Write-Log "SLXDE power plan created and activated"
+        Write-Log "SLXDE power plan created, optimized and activated"
         return "Success"
     }
     catch {

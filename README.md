@@ -4,7 +4,7 @@ A Windows gaming optimization utility built with PowerShell.
 
 ## Version
 
-Current build: **v0.7.5**
+Current build: **v0.7.7**
 
 ## Features
 
@@ -133,3 +133,27 @@ Some settings may require a restart or sign-out to fully apply.
 - Main dashboard is cleaner.
 - Apply All Gaming Tweaks moved inside Gaming Tweaks section.
 - Network reset is clearly separate from Network Pack.
+
+
+## v0.7.6
+
+### Fixed
+- SFC now opens in a separate command window with clear instructions.
+- DISM now opens in a separate command window with clear instructions.
+- Cleanup / Health Check no longer appears frozen during repair tools.
+- AMD Adrenalin launcher checks common install paths.
+- GPU Tools now includes AMD/NVIDIA shader cache folder shortcuts.
+
+
+## v0.7.7
+
+### Fixed / Improved
+- SLXDE PowerPlan now applies fuller desktop gaming power settings:
+  - Turn off display: Never
+  - Sleep after: Never
+  - Hibernate after: Never
+  - Hard disk turn off: Never
+  - Wake timers: Disabled
+  - USB selective suspend: Disabled
+  - PCIe link state power management: Off where supported
+- Existing SLXDE PowerPlan is now re-used and re-optimized instead of creating duplicates.

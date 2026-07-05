@@ -1,5 +1,6 @@
 # =====================================================
 # Cleanup.ps1
+# Cleanup / Health Check
 # =====================================================
 
 function Clear-TempFiles {
@@ -26,8 +27,10 @@ function Clear-TempFiles {
 function Clear-LogFiles {
     try {
         Write-Log "Clearing common log files"
+
         Remove-Item "$env:WINDIR\Logs\CBS\*.log" -Force -ErrorAction SilentlyContinue
         Remove-Item "$env:WINDIR\Logs\DISM\*.log" -Force -ErrorAction SilentlyContinue
+
         return "Success"
     }
     catch {
@@ -35,33 +38,6 @@ function Clear-LogFiles {
         return "Failed"
     }
 }
-
-function Start-DiskCleanup {
-    try {
-        Start-Process cleanmgr.exe
-        Write-Log "Disk Cleanup launched"
-        return "Opened"
-    }
-    catch {
-        Write-Log "Failed launching Disk Cleanup: $($_.Exception.Message)" "ERROR"
-        return "Failed"
-    }
-}
-
-function Invoke-SystemFileCheck {
-    if (!(Assert-Admin)) { return "Failed" }
-    sfc /scannow
-    Write-Log "SFC completed"
-    return "Completed"
-}
-
-function Invoke-WindowsImageRepair {
-    if (!(Assert-Admin)) { return "Failed" }
-    DISM /Online /Cleanup-Image /RestoreHealth
-    Write-Log "DISM completed"
-    return "Completed"
-}
-
 
 function Clear-ShaderCaches {
     try {
@@ -86,6 +62,74 @@ function Clear-ShaderCaches {
         Write-Log "Failed clearing shader caches: $($_.Exception.Message)" "ERROR"
         return "Failed"
     }
+}
+
+function Start-DiskCleanup {
+    try {
+        Start-Process cleanmgr.exe
+        Write-Log "Disk Cleanup launched"
+        return "Opened"
+    }
+    catch {
+        Write-Log "Failed launching Disk Cleanup: $($_.Exception.Message)" "ERROR"
+        return "Failed"
+    }
+}
+
+function Start-RepairCommandWindow {
+    param(
+        [string]$Title,
+        [string]$Command
+    )
+
+    if (!(Assert-Admin)) { return "Failed" }
+
+    try {
+        $Script = @"
+title $Title
+echo ============================================================
+echo $Title
+echo ============================================================
+echo.
+echo This can take several minutes.
+echo Do not close this window until it finishes.
+echo.
+$Command
+echo.
+echo ============================================================
+echo Finished.
+echo ============================================================
+pause
+"@
+
+        $TempFile = Join-Path $env:TEMP "SlxdeRepairCommand.cmd"
+        Set-Content -Path $TempFile -Value $Script -Encoding ASCII
+
+        Start-Process cmd.exe -ArgumentList "/k `"$TempFile`"" -Verb RunAs
+
+        Write-Log "$Title launched in separate command window"
+        return "Opened"
+    }
+    catch {
+        Write-Log "Failed launching $Title $($_.Exception.Message)" "ERROR"
+        return "Failed"
+    }
+}
+
+function Invoke-SystemFileCheck {
+    if (!(Confirm-Action "Run System File Check? This can take 10-20 minutes.")) { return "Cancelled" }
+
+    return Start-RepairCommandWindow `
+        -Title "Slxde Optimizer - System File Check" `
+        -Command "sfc /scannow"
+}
+
+function Invoke-WindowsImageRepair {
+    if (!(Confirm-Action "Run Windows Image Repair? This can take 10-30 minutes.")) { return "Cancelled" }
+
+    return Start-RepairCommandWindow `
+        -Title "Slxde Optimizer - Windows Image Repair" `
+        -Command "DISM /Online /Cleanup-Image /RestoreHealth"
 }
 
 function Show-CleanupMenu {
