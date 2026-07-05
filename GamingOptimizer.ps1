@@ -1,6 +1,6 @@
 # =====================================================
 # Slxde Gaming Optimizer
-# v0.7.8.6
+# v0.8.2.6
 # =====================================================
 
 . "$PSScriptRoot\Modules\Core.ps1"
@@ -14,6 +14,8 @@
 . "$PSScriptRoot\Modules\Tweaks.ps1"
 . "$PSScriptRoot\Modules\WindowsTweaks.ps1"
 . "$PSScriptRoot\Modules\Cleanup.ps1"
+. "$PSScriptRoot\Modules\BackupRestore.ps1"
+. "$PSScriptRoot\Modules\LaptopSafety.ps1"
 . "$PSScriptRoot\Modules\QualityOfLife.ps1"
 . "$PSScriptRoot\Modules\Network.ps1"
 . "$PSScriptRoot\Modules\Specs.ps1"
@@ -63,7 +65,7 @@ while ($true) {
         "9" { Show-OverlayDetection }
         "10" { Show-AdvancedRegistryMenu }
         "11" { Show-PCSpecs }
-        "12" { Show-LatestLog }
+        "14" { Show-LatestLog }
 
         "0" {
             Write-Log "Application Closed"

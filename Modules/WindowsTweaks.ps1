@@ -135,8 +135,10 @@ function Show-WindowsTweaksMenu {
         Show-Banner
         Write-Host "Windows Tweaks" -ForegroundColor Yellow
         Write-Host ""
+        if (Get-Command Write-LaptopCoolingTopNote -ErrorAction SilentlyContinue) { Write-LaptopCoolingTopNote }
 
         Write-Host "  1. Create / Load SLXDE Power Plan"
+        Write-Host "  2. Activate Balanced Power Plan"
         Write-Host "  2. Load Balanced Power Plan"
         Write-Host "  3. Optimize Windows Appearance"
         Write-Host "  4. Disable Background Apps"
@@ -154,6 +156,7 @@ function Show-WindowsTweaksMenu {
 
         switch ($Choice.ToUpper()) {
             "1" { Write-Status "SLXDE Power Plan" (New-SlxdePowerPlan) "Green"; Pause-App }
+            "2" { Write-Status "Balanced Power Plan" (Set-BalancedPowerPlan) "Green"; Pause-App }
             "2" { Write-Status "Balanced Power Plan" (Set-BalancedPowerPlan) "Green"; Pause-App }
             "3" { Write-Status "Optimize Appearance" (Optimize-WindowsAppearance) "Green"; Pause-App }
             "4" { Write-Status "Disable Background Apps" (Disable-BackgroundApps) "Green"; Pause-App }

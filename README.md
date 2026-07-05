@@ -4,7 +4,7 @@ A Windows gaming optimization utility built with PowerShell.
 
 ## Version
 
-Current build: **v0.7.8**
+Current build: **v0.8.2**
 
 ## Features
 
@@ -167,3 +167,64 @@ Some settings may require a restart or sign-out to fully apply.
 - DISM warning now explains it can look stuck at certain percentages.
 - Repair command windows now remind users to restart if repairs are made.
 - Minor restart wording polish.
+
+
+## v0.8.0 Stable Engine
+
+### Added
+- Backup / Restore menu.
+- Create Backup Now.
+- Restore Latest Backup.
+- Show Available Backups.
+- Open Backup Folder.
+- Backups are saved to:
+  `C:\ProgramData\Slxde Gaming Optimizer\Backups`
+
+### Backup includes
+- Restore point attempt.
+- Active power plan info.
+- SLXDE PowerPlan export where available.
+- Key registry areas used by the optimizer:
+  - Game Mode / Game Bar / Game DVR
+  - Per-game GPU preference
+  - Explorer Advanced
+  - Mouse settings
+  - Multimedia SystemProfile
+  - Location privacy setting
+
+### Notes
+- Restoring registry backups may require a restart.
+- Restore points can be skipped by Windows if System Protection is disabled or if a restore point was created recently.
+- This is the stable console-engine base before the GUI/button app work.
+
+
+## v0.8.1
+
+### Added
+- Balanced Power Plan option.
+- Laptop / Temperature Safety menu.
+- Laptop detection using chassis/battery info.
+- Warning before applying the SLXDE PowerPlan on detected laptops.
+- Clear laptop guidance:
+  - Use Balanced on battery.
+  - Use SLXDE PowerPlan only when plugged in.
+  - Monitor CPU/GPU temperatures.
+  - Switch back to Balanced if temperatures or fan noise are too high.
+
+### Power Plan Notes
+- SLXDE PowerPlan is desktop/performance focused.
+- Balanced Power Plan is safer for gaming laptops and battery use.
+
+
+## v0.8.2
+
+### Safety Wording Polish
+- Laptop warning is now shown as a top note in Windows Tweaks instead of as a numbered tweak.
+- Reworded safety language to cover:
+  - gaming laptops
+  - small-form-factor PCs
+  - stock/basic coolers
+  - dusty systems
+  - poor airflow
+  - already-high temperatures
+- Main safety section renamed to Laptop / Cooling Safety.

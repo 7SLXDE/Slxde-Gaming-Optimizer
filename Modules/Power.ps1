@@ -81,6 +81,10 @@ function Set-SlxdePowerPlanSettings {
 function New-SlxdePowerPlan {
     if (!(Assert-Admin)) { return "Failed" }
 
+    if (Get-Command Confirm-LaptopPerformanceTweaks -ErrorAction SilentlyContinue) {
+        if (!(Confirm-LaptopPerformanceTweaks)) { return "Cancelled" }
+    }
+
     try {
         Write-Log "Creating/loading SLXDE power plan"
 
@@ -120,9 +124,30 @@ function New-SlxdePowerPlan {
 }
 
 function Set-BalancedPowerPlan {
+    if (!(Assert-Admin)) { return "Failed" }
+
     try {
         powercfg /setactive SCHEME_BALANCED | Out-Null
-        Write-Log "Balanced power plan activated"
+
+        # Balanced laptop-friendly defaults.
+        # AC: display 15 min, sleep never for desktop/gaming use.
+        # DC: display 5 min, sleep 15 min for battery safety.
+        powercfg /change monitor-timeout-ac 15 | Out-Null
+        powercfg /change standby-timeout-ac 0 | Out-Null
+        powercfg /change hibernate-timeout-ac 0 | Out-Null
+
+        powercfg /change monitor-timeout-dc 5 | Out-Null
+        powercfg /change standby-timeout-dc 15 | Out-Null
+        powercfg /change hibernate-timeout-dc 30 | Out-Null
+
+        cmd /c "powercfg -setacvalueindex SCHEME_BALANCED SUB_SLEEP RTCWAKE 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex SCHEME_BALANCED SUB_SLEEP RTCWAKE 0 >nul 2>nul"
+        cmd /c "powercfg -setacvalueindex SCHEME_BALANCED SUB_USB USBSELECTIVE 1 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex SCHEME_BALANCED SUB_USB USBSELECTIVE 1 >nul 2>nul"
+
+        powercfg /setactive SCHEME_BALANCED | Out-Null
+
+        Write-Log "Balanced power plan activated with laptop-friendly defaults"
         return "Success"
     }
     catch {
