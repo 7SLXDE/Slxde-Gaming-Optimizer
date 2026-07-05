@@ -2,7 +2,7 @@
 # Logger.ps1
 # =====================================================
 
-$script:LogFolder = Join-Path $PSScriptRoot "..\Logs"
+$script:LogFolder = Join-Path "$PSScriptRoot\.." "Logs"
 $script:LogFile = Join-Path $script:LogFolder "$(Get-Date -Format 'yyyy-MM-dd').log"
 
 function Initialize-Logger {
@@ -27,16 +27,14 @@ function Write-Log {
 }
 
 function Show-LatestLog {
-    Initialize-Logger
+    Show-Banner
+    Write-Host "Latest Log" -ForegroundColor Yellow
+    Write-Host ("-" * 58) -ForegroundColor DarkGray
 
-    if (Test-Path $script:LogFile) {
-        Write-Host "Latest Log" -ForegroundColor Yellow
-        Write-Host "-------------------------------------------------------------" -ForegroundColor DarkGray
-        Get-Content $script:LogFile -Tail 25
-    }
-    else {
-        Write-Host "No log file found." -ForegroundColor Yellow
-    }
+    Initialize-Logger
+    Get-Content $script:LogFile -Tail 40
+
+    Pause-App
 }
 
 Initialize-Logger

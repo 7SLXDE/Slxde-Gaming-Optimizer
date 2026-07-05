@@ -2,25 +2,27 @@
 # Display.ps1
 # =====================================================
 
+function Write-Status {
+    param(
+        [string]$Name,
+        [string]$Status,
+        [string]$Colour = "White"
+    )
+
+    Write-Host ("{0,-28}" -f $Name) -NoNewline
+
+    switch ($Colour) {
+        "Green"  { Write-Host $Status -ForegroundColor Green }
+        "Red"    { Write-Host $Status -ForegroundColor Red }
+        "Yellow" { Write-Host $Status -ForegroundColor Yellow }
+        "Cyan"   { Write-Host $Status -ForegroundColor Cyan }
+        Default  { Write-Host $Status }
+    }
+}
+
 function Show-Section {
     param([string]$Title)
-
     Write-Host ""
     Write-Host $Title -ForegroundColor Yellow
-    Write-Host "-------------------------------------------------------------" -ForegroundColor DarkGray
-}
-
-function Write-Good {
-    param([string]$Text)
-    Write-Host "[OK] $Text" -ForegroundColor Green
-}
-
-function Write-Warning {
-    param([string]$Text)
-    Write-Host "[!] $Text" -ForegroundColor Yellow
-}
-
-function Write-Bad {
-    param([string]$Text)
-    Write-Host "[X] $Text" -ForegroundColor Red
+    Write-Host ("-" * 58) -ForegroundColor DarkGray
 }

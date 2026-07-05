@@ -74,3 +74,29 @@
 [2026-07-05 19:41:19] [INFO] Restoring HAGS to Windows default
 [2026-07-05 19:41:19] [INFO] Restoring Windowed Optimizations to Windows default
 [2026-07-05 19:41:19] [INFO] Restoring mouse acceleration default
+[2026-07-05 19:42:28] [INFO] Analyze PC selected
+[2026-07-05 19:42:28] [INFO] Starting gaming analysis
+[2026-07-05 19:42:29] [INFO] Hardware info collected
+[2026-07-05 19:42:29] [INFO] Gaming analysis complete. Score: 29/100
+[2026-07-05 19:42:37] [INFO] Apply safe gaming tweaks selected
+[2026-07-05 19:42:37] [INFO] Creating restore point...
+[2026-07-05 19:42:45] [INFO] Restore point created successfully.
+[2026-07-05 19:42:45] [INFO] Enabling Game Mode
+[2026-07-05 19:42:45] [INFO] Disabling Game DVR
+[2026-07-05 19:42:45] [INFO] Enabling HAGS
+[2026-07-05 19:42:45] [INFO] Enabling Windowed Optimizations
+[2026-07-05 19:42:45] [INFO] Disabling mouse acceleration
+[2026-07-05 19:43:06] [INFO] Analyze PC selected
+[2026-07-05 19:43:06] [INFO] Starting gaming analysis
+[2026-07-05 19:43:07] [INFO] Hardware info collected
+[2026-07-05 19:43:07] [INFO] Gaming analysis complete. Score: 100/100
+[2026-07-05 19:46:14] [INFO] Application Started
+[2026-07-05 19:46:40] [INFO] Creating restore point
+[2026-07-05 19:46:47] [INFO] Restore point created successfully
+[2026-07-05 19:46:47] [INFO] Creating SLXDE power plan
+[2026-07-05 19:46:48] [INFO] SLXDE power plan created and activated
+[2026-07-05 19:46:48] [INFO] Windows appearance optimized
+[2026-07-05 19:46:48] [INFO] Background apps disabled
+[2026-07-05 19:46:48] [INFO] Location tracking disabled
+[2026-07-05 19:46:48] [INFO] USB power saving disabled
+[2026-07-05 19:46:48] [INFO] Startup delay disabled

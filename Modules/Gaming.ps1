@@ -8,65 +8,95 @@ function Get-GamingScore {
         [string]$GameDVR,
         [string]$XboxCapture,
         [string]$HAGS,
-        [string]$WindowedOptimizations,
-        [string]$MouseAcceleration,
+        [string]$WindowedOpt,
         [string]$PowerPlan
     )
 
     $Score = 0
-    $Max = 7
+    $Total = 5
 
     if ($GameMode -eq "Enabled") { $Score++ }
     if ($GameDVR -eq "Disabled") { $Score++ }
     if ($XboxCapture -eq "Disabled") { $Score++ }
     if ($HAGS -eq "Enabled") { $Score++ }
-    if ($WindowedOptimizations -eq "Enabled") { $Score++ }
-    if ($MouseAcceleration -eq "Disabled") { $Score++ }
-    if ($PowerPlan -match "Ultimate|High|HDOptimised|SLXDE") { $Score++ }
+    if ($WindowedOpt -eq "Enabled") { $Score++ }
 
-    return [math]::Round(($Score / $Max) * 100)
+    # Power plan is informational because custom plans vary.
+    $Percent = [math]::Round(($Score / $Total) * 100)
+    return $Percent
 }
 
 function Get-GamingAnalysis {
     Write-Log "Starting gaming analysis"
+
     Show-Banner
 
     Show-Section "System"
 
-    if (Test-Administrator) { Write-Status "Administrator" "YES" "Green" }
-    else { Write-Status "Administrator" "NO" "Red" }
+    if (Test-Administrator) {
+        Write-Status "Administrator" "YES" "Green"
+    }
+    else {
+        Write-Status "Administrator" "NO" "Red"
+    }
 
     Get-HardwareInfo
 
     Show-Section "Gaming Checks"
 
-    $GameMode = Get-GameModeStatus
-    $GameDVR = Get-GameDVRStatus
-    $XboxCapture = Get-XboxCaptureStatus
-    $HAGS = Get-HAGSStatus
-    $WindowedOptimizations = Get-WindowedOptimizationsStatus
-    $MouseAcceleration = Get-MouseAccelerationStatus
+    $GameMode  = Get-GameModeStatus
+    $GameDVR   = Get-GameDVRStatus
+    $Xbox      = Get-XboxCaptureStatus
+    $HAGS      = Get-HAGSStatus
+    $WinOpt    = Get-WindowedOptimizationsStatus
     $PowerPlan = Get-PowerPlan
-    $Ultimate = Test-UltimatePerformance
+    $Ultimate  = Test-UltimatePerformance
 
-    if ($GameMode -eq "Enabled") { Write-Status "Game Mode" $GameMode "Green" } else { Write-Status "Game Mode" $GameMode "Yellow" }
-    if ($GameDVR -eq "Disabled") { Write-Status "Game DVR" $GameDVR "Green" } else { Write-Status "Game DVR" $GameDVR "Yellow" }
-    if ($XboxCapture -eq "Disabled") { Write-Status "Xbox Capture" $XboxCapture "Green" } else { Write-Status "Xbox Capture" $XboxCapture "Yellow" }
-    if ($HAGS -eq "Enabled") { Write-Status "HAGS" $HAGS "Green" } else { Write-Status "HAGS" $HAGS "Yellow" }
-    if ($WindowedOptimizations -eq "Enabled") { Write-Status "Windowed Optimizations" $WindowedOptimizations "Green" } else { Write-Status "Windowed Optimizations" $WindowedOptimizations "Yellow" }
-    if ($MouseAcceleration -eq "Disabled") { Write-Status "Mouse Acceleration" $MouseAcceleration "Green" } else { Write-Status "Mouse Acceleration" $MouseAcceleration "Yellow" }
+    switch ($GameMode) {
+        "Enabled"  { Write-Status "Game Mode" $GameMode "Green" }
+        "Disabled" { Write-Status "Game Mode" $GameMode "Red" }
+        default    { Write-Status "Game Mode" $GameMode "Yellow" }
+    }
 
-    if ($PowerPlan -match "Ultimate|High|HDOptimised|SLXDE") { Write-Status "Power Plan" $PowerPlan "Green" }
-    else { Write-Status "Power Plan" $PowerPlan "Yellow" }
+    switch ($GameDVR) {
+        "Disabled" { Write-Status "Game DVR" $GameDVR "Green" }
+        "Enabled"  { Write-Status "Game DVR" $GameDVR "Yellow" }
+        default    { Write-Status "Game DVR" $GameDVR "Yellow" }
+    }
 
-    if ($Ultimate) { Write-Status "Ultimate Plan Available" "YES" "Green" }
-    else { Write-Status "Ultimate Plan Available" "NO" "Yellow" }
+    switch ($Xbox) {
+        "Disabled" { Write-Status "Xbox Capture" $Xbox "Green" }
+        "Enabled"  { Write-Status "Xbox Capture" $Xbox "Yellow" }
+        default    { Write-Status "Xbox Capture" $Xbox "Yellow" }
+    }
 
-    $Score = Get-GamingScore -GameMode $GameMode -GameDVR $GameDVR -XboxCapture $XboxCapture -HAGS $HAGS -WindowedOptimizations $WindowedOptimizations -MouseAcceleration $MouseAcceleration -PowerPlan $PowerPlan
+    switch ($HAGS) {
+        "Enabled"  { Write-Status "HAGS" $HAGS "Green" }
+        "Disabled" { Write-Status "HAGS" $HAGS "Red" }
+        default    { Write-Status "HAGS" $HAGS "Yellow" }
+    }
+
+    switch ($WinOpt) {
+        "Enabled"  { Write-Status "Windowed Optimizations" $WinOpt "Green" }
+        "Disabled" { Write-Status "Windowed Optimizations" $WinOpt "Yellow" }
+        default    { Write-Status "Windowed Optimizations" $WinOpt "Yellow" }
+    }
+
+    Write-Status "Power Plan" $PowerPlan "Green"
+
+    if ($Ultimate) {
+        Write-Status "Ultimate Plan Available" "YES" "Green"
+    }
+    else {
+        Write-Status "Ultimate Plan Available" "NO" "Yellow"
+    }
 
     Show-Section "Score"
+
+    $Score = Get-GamingScore $GameMode $GameDVR $Xbox $HAGS $WinOpt $PowerPlan
     Write-Status "Gaming Score" "$Score / 100" "Cyan"
 
-    Write-Log "Gaming analysis complete. Score: $Score/100"
+    Write-Log "Gaming analysis completed. Score: $Score/100"
+
     Pause-App
 }

@@ -1,6 +1,6 @@
 # =====================================================
 # Slxde Gaming Optimizer
-# Version 0.6.2
+# v0.7
 # =====================================================
 
 . "$PSScriptRoot\Modules\Core.ps1"
@@ -12,21 +12,32 @@
 . "$PSScriptRoot\Modules\Gaming.ps1"
 . "$PSScriptRoot\Modules\RestorePoint.ps1"
 . "$PSScriptRoot\Modules\Tweaks.ps1"
-. "$PSScriptRoot\Modules\Restore.ps1"
+. "$PSScriptRoot\Modules\WindowsTweaks.ps1"
+. "$PSScriptRoot\Modules\Cleanup.ps1"
+. "$PSScriptRoot\Modules\QualityOfLife.ps1"
+. "$PSScriptRoot\Modules\Network.ps1"
+. "$PSScriptRoot\Modules\Specs.ps1"
 
-Write-Log "Application started"
+Write-Log "Application Started"
 
 while ($true) {
+
     Show-Banner
 
     Write-Host ""
     Write-Host "Dashboard" -ForegroundColor Yellow
     Write-Host ""
+
     Write-Host "  1. Analyze PC"
     Write-Host "  2. Apply Safe Gaming Tweaks"
     Write-Host "  3. Restore / Undo Gaming Tweaks"
-    Write-Host "  4. Create Restore Point"
-    Write-Host "  5. View Logs"
+    Write-Host ""
+    Write-Host "  4. Windows Tweaks"
+    Write-Host "  5. Cleanup / Health Check"
+    Write-Host "  6. Quality of Life Tweaks"
+    Write-Host "  7. Network Tweaks"
+    Write-Host "  8. PC Specs"
+    Write-Host "  9. View Latest Log"
     Write-Host ""
     Write-Host "  0. Exit"
     Write-Host ""
@@ -34,48 +45,19 @@ while ($true) {
     $Choice = Read-Host "Select"
 
     switch ($Choice) {
-        "1" {
-            Write-Log "Analyze PC selected"
-            Get-GamingAnalysis
-        }
 
-        "2" {
-            Write-Log "Apply safe gaming tweaks selected"
-            Apply-SafeGamingTweaks
-        }
-
-        "3" {
-            Write-Log "Restore gaming tweaks selected"
-            Restore-GamingTweaks
-        }
-
-        "4" {
-            Write-Log "Create restore point selected"
-            Show-Banner
-            Write-Host "Creating restore point..." -ForegroundColor Yellow
-            Write-Host ""
-
-            $Result = New-OptimizerRestorePoint
-
-            if ($Result -eq "Success") {
-                Write-Host "Restore point created successfully." -ForegroundColor Green
-            }
-            else {
-                Write-Host "Restore point failed." -ForegroundColor Red
-                Write-Host "System Protection may be disabled on this drive." -ForegroundColor Yellow
-            }
-
-            Pause-App
-        }
-
-        "5" {
-            Show-Banner
-            Show-LatestLog
-            Pause-App
-        }
+        "1" { Get-GamingAnalysis }
+        "2" { Invoke-SafeGamingTweaks }
+        "3" { Restore-GamingTweaks }
+        "4" { Show-WindowsTweaksMenu }
+        "5" { Show-CleanupMenu }
+        "6" { Show-QualityOfLifeMenu }
+        "7" { Show-NetworkMenu }
+        "8" { Show-PCSpecs }
+        "9" { Show-LatestLog }
 
         "0" {
-            Write-Log "Application closed"
+            Write-Log "Application Closed"
             break
         }
 
