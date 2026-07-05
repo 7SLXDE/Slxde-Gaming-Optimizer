@@ -122,3 +122,38 @@
 [2026-07-05 19:51:31] [INFO] USB power saving disabled
 [2026-07-05 19:51:31] [INFO] Startup delay disabled
 [2026-07-05 19:52:03] [INFO] Opened advanced display settings
+[2026-07-05 19:58:48] [INFO] Application Started
+[2026-07-05 19:59:02] [ERROR] Failed disabling NIC power saving: A parameter cannot be found that matches parameter name 'AllowComputerToTurnOffDevice'.
+[2026-07-05 19:59:05] [ERROR] Failed disabling NIC power saving: A parameter cannot be found that matches parameter name 'AllowComputerToTurnOffDevice'.
+[2026-07-05 20:00:50] [INFO] Hardware info collected
+[2026-07-05 20:01:06] [INFO] Overlay detection completed
+[2026-07-05 20:01:28] [INFO] Opened advanced display settings
+[2026-07-05 20:01:51] [INFO] Creating restore point
+[2026-07-05 20:01:59] [INFO] Restore point created successfully
+[2026-07-05 20:01:59] [INFO] Game Mode enabled
+[2026-07-05 20:01:59] [INFO] Game DVR / Xbox Capture disabled
+[2026-07-05 20:01:59] [INFO] HAGS enabled
+[2026-07-05 20:01:59] [INFO] Windowed optimizations enabled
+[2026-07-05 20:01:59] [INFO] Mouse acceleration disabled
+[2026-07-05 20:02:57] [INFO] Opened Windows graphics settings
+[2026-07-05 20:03:08] [INFO] Opened Windows graphics settings
+[2026-07-05 20:06:42] [INFO] Application Started
+[2026-07-05 20:06:45] [INFO] Starting gaming analysis
+[2026-07-05 20:06:47] [INFO] Hardware info collected
+[2026-07-05 20:06:47] [INFO] Gaming analysis completed. Score: 100/100
+[2026-07-05 20:07:03] [ERROR] Failed to set high performance GPU preference: Cannot bind argument to parameter 'Name' because it is an empty string.
+[2026-07-05 20:07:20] [INFO] Set Wake on Magic Packet to Disabled on Ethernet
+[2026-07-05 20:07:20] [INFO] Set Wake on pattern match to Disabled on Ethernet
+[2026-07-05 20:07:20] [INFO] Set Interrupt Moderation to Disabled on Ethernet
+[2026-07-05 20:07:20] [INFO] Set Speed & Duplex to Auto Negotiation on Ethernet
+[2026-07-05 20:07:20] [INFO] Network Pack completed. Applied 4 / 8 supported adapter tweaks.
+[2026-07-05 20:07:49] [INFO] NetworkThrottlingIndex set to ffffffff
+[2026-07-05 20:07:49] [INFO] SystemResponsiveness set to 0
+[2026-07-05 20:08:02] [INFO] AMD software not found
+[2026-07-05 20:08:26] [INFO] Display refresh info shown
+[2026-07-05 20:08:44] [INFO] Opened startup apps settings
+[2026-07-05 20:09:50] [INFO] Clearing temp files
+[2026-07-05 20:09:56] [INFO] Clearing common log files
+[2026-07-05 20:09:59] [INFO] Disk Cleanup launched
+[2026-07-05 20:14:32] [INFO] SFC completed
+[2026-07-05 20:15:13] [INFO] SFC completed

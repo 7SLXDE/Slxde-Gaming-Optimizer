@@ -1,6 +1,6 @@
 # =====================================================
 # Slxde Gaming Optimizer
-# v0.7.2
+# v0.7.5
 # =====================================================
 
 . "$PSScriptRoot\Modules\Core.ps1"
@@ -17,6 +17,10 @@
 . "$PSScriptRoot\Modules\QualityOfLife.ps1"
 . "$PSScriptRoot\Modules\Network.ps1"
 . "$PSScriptRoot\Modules\Specs.ps1"
+. "$PSScriptRoot\Modules\DisplayTweaks.ps1"
+. "$PSScriptRoot\Modules\GPUTools.ps1"
+. "$PSScriptRoot\Modules\OverlayDetection.ps1"
+. "$PSScriptRoot\Modules\AdvancedRegistry.ps1"
 
 Write-Log "Application Started"
 
@@ -29,15 +33,17 @@ while ($true) {
     Write-Host ""
 
     Write-Host "  1. Analyze PC"
-    Write-Host "  2. Apply Safe Gaming Tweaks"
-    Write-Host "  3. Restore / Undo Gaming Tweaks"
-    Write-Host ""
-    Write-Host "  4. Windows Tweaks"
+    Write-Host "  2. Gaming Tweaks"
+    Write-Host "  3. Windows Tweaks"
+    Write-Host "  4. Network Tweaks"
     Write-Host "  5. Cleanup / Health Check"
     Write-Host "  6. Quality of Life Tweaks"
-    Write-Host "  7. Network Tweaks"
-    Write-Host "  8. PC Specs"
-    Write-Host "  9. View Latest Log"
+    Write-Host "  7. Display Tweaks"
+    Write-Host "  8. GPU Tools"
+    Write-Host "  9. Overlay Detection"
+    Write-Host " 10. Advanced Registry Tweaks"
+    Write-Host " 11. PC Specs"
+    Write-Host " 12. View Latest Log"
     Write-Host ""
     Write-Host "  0. Exit"
     Write-Host ""
@@ -47,14 +53,17 @@ while ($true) {
     switch ($Choice) {
 
         "1" { Get-GamingAnalysis }
-        "2" { Invoke-SafeGamingTweaks }
-        "3" { Restore-GamingTweaks }
-        "4" { Show-WindowsTweaksMenu }
+        "2" { Show-GamingTweaksMenu }
+        "3" { Show-WindowsTweaksMenu }
+        "4" { Show-NetworkMenu }
         "5" { Show-CleanupMenu }
         "6" { Show-QualityOfLifeMenu }
-        "7" { Show-NetworkMenu }
-        "8" { Show-PCSpecs }
-        "9" { Show-LatestLog }
+        "7" { Show-DisplayTweaksMenu }
+        "8" { Show-GPUToolsMenu }
+        "9" { Show-OverlayDetection }
+        "10" { Show-AdvancedRegistryMenu }
+        "11" { Show-PCSpecs }
+        "12" { Show-LatestLog }
 
         "0" {
             Write-Log "Application Closed"

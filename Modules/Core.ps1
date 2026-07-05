@@ -6,7 +6,7 @@ function Show-Banner {
     Clear-Host
     Write-Host ""
     Write-Host "=============================================================" -ForegroundColor Cyan
-    Write-Host "                 Slxde Gaming Optimizer v0.7.2" -ForegroundColor Green
+    Write-Host "                 Slxde Gaming Optimizer v0.7.5" -ForegroundColor Green
     Write-Host "=============================================================" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -32,4 +32,22 @@ function Assert-Admin {
         return $false
     }
     return $true
+}
+
+
+function Confirm-Action {
+    param(
+        [string]$Message = "Are you sure?"
+    )
+
+    Write-Host ""
+    Write-Host $Message -ForegroundColor Yellow
+    $Answer = Read-Host "Type Y to continue"
+
+    if ($Answer.ToUpper() -eq "Y") {
+        return $true
+    }
+
+    Write-Host "Cancelled." -ForegroundColor Yellow
+    return $false
 }

@@ -62,6 +62,32 @@ function Invoke-WindowsImageRepair {
     return "Completed"
 }
 
+
+function Clear-ShaderCaches {
+    try {
+        Write-Log "Clearing shader caches"
+
+        $Paths = @(
+            "$env:LOCALAPPDATA\D3DSCache\*",
+            "$env:LOCALAPPDATA\NVIDIA\DXCache\*",
+            "$env:LOCALAPPDATA\NVIDIA\GLCache\*",
+            "$env:ProgramData\NVIDIA Corporation\NV_Cache\*",
+            "$env:LOCALAPPDATA\AMD\DxCache\*",
+            "$env:LOCALAPPDATA\AMD\GLCache\*"
+        )
+
+        foreach ($Path in $Paths) {
+            Remove-Item $Path -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
+        return "Success"
+    }
+    catch {
+        Write-Log "Failed clearing shader caches: $($_.Exception.Message)" "ERROR"
+        return "Failed"
+    }
+}
+
 function Show-CleanupMenu {
     while ($true) {
         Show-Banner
@@ -71,8 +97,9 @@ function Show-CleanupMenu {
         Write-Host "  1. Delete Temp Files"
         Write-Host "  2. Delete Log Files"
         Write-Host "  3. Open Disk Cleanup"
-        Write-Host "  4. System File Check"
-        Write-Host "  5. Windows Image Check and Repair"
+        Write-Host "  4. Clear Shader Caches"
+        Write-Host "  5. System File Check"
+        Write-Host "  6. Windows Image Check and Repair"
         Write-Host ""
         Write-Host "  0. Back"
         Write-Host ""
@@ -83,8 +110,9 @@ function Show-CleanupMenu {
             "1" { Write-Status "Temp Files" (Clear-TempFiles) "Green"; Pause-App }
             "2" { Write-Status "Log Files" (Clear-LogFiles) "Green"; Pause-App }
             "3" { Write-Status "Disk Cleanup" (Start-DiskCleanup) "Yellow"; Pause-App }
-            "4" { Write-Status "System File Check" (Invoke-SystemFileCheck) "Yellow"; Pause-App }
-            "5" { Write-Status "Windows Image Repair" (Invoke-WindowsImageRepair) "Yellow"; Pause-App }
+            "4" { Write-Status "Shader Caches" (Clear-ShaderCaches) "Green"; Pause-App }
+            "5" { Write-Status "System File Check" (Invoke-SystemFileCheck) "Yellow"; Pause-App }
+            "6" { Write-Status "Windows Image Repair" (Invoke-WindowsImageRepair) "Yellow"; Pause-App }
             "0" { return }
             default { Write-Host "Invalid option." -ForegroundColor Red; Pause-App }
         }
