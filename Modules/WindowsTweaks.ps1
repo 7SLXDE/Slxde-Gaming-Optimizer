@@ -45,10 +45,13 @@ function Disable-LocationTracking {
 
 function Disable-USBPowerSaving {
     try {
-        powercfg -setacvalueindex SCHEME_CURRENT SUB_USB USBSELECTIVE 0 | Out-Null
-        powercfg -setdcvalueindex SCHEME_CURRENT SUB_USB USBSELECTIVE 0 | Out-Null
-        powercfg /setactive SCHEME_CURRENT | Out-Null
+        # Some Windows builds reject the SUB_USB aliases and print "Invalid Parameters".
+        # These commands are safe but optional, so output/errors are suppressed.
+        cmd /c "powercfg -setacvalueindex SCHEME_CURRENT SUB_USB USBSELECTIVE 0 >nul 2>nul"
+        cmd /c "powercfg -setdcvalueindex SCHEME_CURRENT SUB_USB USBSELECTIVE 0 >nul 2>nul"
+        cmd /c "powercfg /setactive SCHEME_CURRENT >nul 2>nul"
 
+        # Device-level USB power saving where supported.
         $UsbDevices = Get-CimInstance MSPower_DeviceEnable -Namespace root\wmi -ErrorAction SilentlyContinue
         foreach ($Device in $UsbDevices) {
             $Device.Enable = $false

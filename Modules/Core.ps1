@@ -6,7 +6,7 @@ function Show-Banner {
     Clear-Host
     Write-Host ""
     Write-Host "=============================================================" -ForegroundColor Cyan
-    Write-Host "                 Slxde Gaming Optimizer v0.7" -ForegroundColor Green
+    Write-Host "                 Slxde Gaming Optimizer v0.7.2" -ForegroundColor Green
     Write-Host "=============================================================" -ForegroundColor Cyan
     Write-Host ""
 }

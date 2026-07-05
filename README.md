@@ -4,7 +4,7 @@ A Windows gaming optimization utility built with PowerShell.
 
 ## Version
 
-Current build: **v0.7**
+Current build: **v0.7.2**
 
 ## Features
 
@@ -66,3 +66,17 @@ Current build: **v0.7**
 Run PowerShell as Administrator for system-level tweaks.
 
 Some settings may require a restart or sign-out to fully apply.
+
+
+## v0.7.1
+
+### Fixed
+- Removed noisy/invalid `powercfg -setacvalueindex` calls from SLXDE Power Plan creation.
+- Cleaner output when creating and activating the SLXDE Power Plan.
+
+
+## v0.7.2
+
+### Fixed
+- Suppressed unsupported `powercfg` parameter output from USB power saving tweak.
+- USB power saving tweak now applies registry/device changes without showing `Invalid Parameters` spam.

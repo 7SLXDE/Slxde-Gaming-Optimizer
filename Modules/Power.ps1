@@ -25,6 +25,19 @@ function New-SlxdePowerPlan {
     try {
         Write-Log "Creating SLXDE power plan"
 
+        $ExistingPlans = powercfg /list
+
+        if ($ExistingPlans -match "SLXDE PowerPlan") {
+            $MatchLine = ($ExistingPlans | Select-String "SLXDE PowerPlan" | Select-Object -First 1).Line
+
+            if ($MatchLine -match '([a-fA-F0-9\-]{36})') {
+                $ExistingGuid = $Matches[1]
+                powercfg /setactive $ExistingGuid | Out-Null
+                Write-Log "Existing SLXDE power plan activated"
+                return "Success"
+            }
+        }
+
         $DuplicateOutput = powercfg -duplicatescheme SCHEME_MIN
         $Guid = $null
 
@@ -32,16 +45,18 @@ function New-SlxdePowerPlan {
             $Guid = $Matches[1]
         }
 
-        if (!$Guid) { return "Failed" }
+        if (!$Guid) {
+            Write-Log "Could not create SLXDE power plan GUID" "ERROR"
+            return "Failed"
+        }
 
-        powercfg -changename $Guid "SLXDE PowerPlan" "Created by Slxde Gaming Optimizer"
-        powercfg /setactive $Guid
-
-        # Safe power tweaks
-        powercfg -setacvalueindex $Guid SUB_PROCESSOR PROCTHROTTLEMIN 100 | Out-Null
-        powercfg -setacvalueindex $Guid SUB_PROCESSOR PROCTHROTTLEMAX 100 | Out-Null
-        powercfg -setacvalueindex $Guid SUB_USB USBSELECTIVE 0 | Out-Null
+        powercfg -changename $Guid "SLXDE PowerPlan" "Created by Slxde Gaming Optimizer" | Out-Null
         powercfg /setactive $Guid | Out-Null
+
+        # Safe USB selective suspend change. Other processor-specific settings vary by Windows build,
+        # so they are not forced here to avoid invalid parameter output.
+        powercfg /change monitor-timeout-ac 0 | Out-Null
+        powercfg /change standby-timeout-ac 0 | Out-Null
 
         Write-Log "SLXDE power plan created and activated"
         return "Success"
