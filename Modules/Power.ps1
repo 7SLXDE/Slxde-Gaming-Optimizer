@@ -1,6 +1,5 @@
 # =====================================================
 # Power.ps1
-# Power plan detection
 # =====================================================
 
 function Get-PowerPlan {
@@ -21,7 +20,8 @@ function Get-PowerPlan {
 function Test-UltimatePerformance {
     try {
         $Plans = powercfg /list
-        return ($Plans -match "Ultimate Performance")
+        if ($Plans -match "Ultimate Performance") { return $true }
+        return $false
     }
     catch {
         return $false

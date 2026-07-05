@@ -16,3 +16,15 @@
 [2026-07-05 19:02:50] [INFO] Analyze PC selected
 [2026-07-05 19:02:50] [INFO] Starting analyzer
 [2026-07-05 19:02:52] [INFO] Analyzer complete. Score: 86/100
+[2026-07-05 19:07:40] [INFO] Analyze PC selected
+[2026-07-05 19:07:40] [INFO] Starting analyzer
+[2026-07-05 19:07:41] [INFO] Analyzer complete. Score: 86/100
+[2026-07-05 19:10:51] [INFO] Application started
+[2026-07-05 19:12:23] [INFO] Analyze PC selected
+[2026-07-05 19:12:23] [INFO] Starting gaming analysis
+[2026-07-05 19:12:24] [INFO] Hardware info collected
+[2026-07-05 19:12:24] [INFO] Gaming analysis completed. Score: 100
+[2026-07-05 19:17:24] [INFO] Application Started
+[2026-07-05 19:18:00] [INFO] Create Restore Point Selected
+[2026-07-05 19:18:00] [INFO] Creating restore point...
+[2026-07-05 19:18:08] [INFO] Restore point created successfully.

@@ -1,6 +1,5 @@
 # =====================================================
 # Core.ps1
-# Shared functions
 # =====================================================
 
 function Test-Administrator {
@@ -18,16 +17,26 @@ function Pause-App {
     Read-Host "Press ENTER to continue"
 }
 
-function Get-SafeRegistryValue {
-    param(
-        [string]$Path,
-        [string]$Name
-    )
-
+function Get-WindowsReleaseName {
     try {
-        return Get-ItemPropertyValue -Path $Path -Name $Name -ErrorAction Stop
+        $DisplayVersion = Get-ItemPropertyValue `
+            -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" `
+            -Name "DisplayVersion" `
+            -ErrorAction Stop
+
+        return $DisplayVersion
     }
     catch {
-        return $null
+        try {
+            $ReleaseId = Get-ItemPropertyValue `
+                -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" `
+                -Name "ReleaseId" `
+                -ErrorAction Stop
+
+            return $ReleaseId
+        }
+        catch {
+            return "Unknown"
+        }
     }
 }

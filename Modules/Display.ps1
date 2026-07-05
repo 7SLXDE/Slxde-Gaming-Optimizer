@@ -1,13 +1,12 @@
 # =====================================================
 # Display.ps1
-# Console UI helpers
 # =====================================================
 
 function Show-Banner {
     Clear-Host
     Write-Host ""
     Write-Host "=============================================================" -ForegroundColor Cyan
-    Write-Host "                 Slxde Gaming Optimizer v0.5.2" -ForegroundColor Green
+    Write-Host "                 Slxde Gaming Optimizer v0.5.3" -ForegroundColor Green
     Write-Host "=============================================================" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -27,7 +26,7 @@ function Write-Status {
         [string]$Colour = "White"
     )
 
-    Write-Host ("{0,-34}" -f $Name) -NoNewline
+    Write-Host ("{0,-32}" -f $Name) -NoNewline
 
     switch ($Colour) {
         "Green"  { Write-Host $Status -ForegroundColor Green }
@@ -38,12 +37,7 @@ function Write-Status {
     }
 }
 
-function Show-Warning {
-    param([string]$Message)
-    Write-Host "[!] $Message" -ForegroundColor Yellow
-}
-
-function Show-ErrorMessage {
-    param([string]$Message)
-    Write-Host "[X] $Message" -ForegroundColor Red
+function Write-WarningText {
+    param([string]$Text)
+    Write-Host $Text -ForegroundColor Yellow
 }

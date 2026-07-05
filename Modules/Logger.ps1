@@ -21,10 +21,25 @@ function Write-Log {
         [string]$Level = "INFO"
     )
 
-    if (!(Test-Path $script:LogFolder)) {
-        Initialize-Logger
+    try {
+        $Time = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        Add-Content -Path $script:LogFile -Value "[$Time] [$Level] $Message"
+    }
+    catch {
+        # Logging should never crash the app.
+    }
+}
+
+function Show-Logs {
+    Show-Banner
+    Show-Section "Latest Log"
+
+    if (Test-Path $script:LogFile) {
+        Get-Content $script:LogFile -Tail 25
+    }
+    else {
+        Write-Host "No log file found." -ForegroundColor Yellow
     }
 
-    $Time = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    Add-Content -Path $script:LogFile -Value "[$Time] [$Level] $Message"
+    Pause-App
 }

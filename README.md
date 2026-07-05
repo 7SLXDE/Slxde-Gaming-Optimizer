@@ -2,16 +2,19 @@
 
 A Windows gaming optimization utility built with PowerShell.
 
-## v0.5.2
+## Version
+v0.5.3
 
-Includes:
-- Hardware detection
+## Features
+- Hardware analysis
 - Game Mode detection
 - Game DVR detection
-- Xbox capture detection
+- Xbox Capture detection
 - HAGS detection
-- Variable Refresh Rate detection
 - Windowed Optimizations detection
-- Power plan detection
+- Power Plan detection
+- Gaming Score
 - Logging
-- Gaming score
+
+## Notes
+Variable Refresh Rate has been removed from scoring and analysis because it is preference-based and not always ideal for competitive gaming.
