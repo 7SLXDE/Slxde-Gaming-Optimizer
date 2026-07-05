@@ -11,6 +11,7 @@
 . "$PSScriptRoot\Modules\Power.ps1"
 . "$PSScriptRoot\Modules\Gaming.ps1"
 . "$PSScriptRoot\Modules\RestorePoint.ps1"
+. "$PSScriptRoot\Modules\Tweaks.ps1"
 
 Write-Log "Application Started"
 
@@ -24,6 +25,7 @@ while ($true) {
 
     Write-Host "  1. Analyze PC"
     Write-Host "  2. Create Restore Point"
+    Write-Host "  3. Disable Game DVR"
     Write-Host ""
     Write-Host "  0. Exit"
     Write-Host ""
@@ -53,6 +55,26 @@ while ($true) {
             else {
                 Write-Host "Restore point failed." -ForegroundColor Red
                 Write-Host "System Protection may be disabled on this drive." -ForegroundColor Yellow
+            }
+
+            Pause-App
+        }
+
+        "3" {
+            Write-Log "Disable Game DVR Selected"
+
+            Show-Banner
+            Write-Host ""
+            Write-Host "Disabling Game DVR..." -ForegroundColor Yellow
+            Write-Host ""
+
+            $Result = Disable-GameDVR
+
+            if ($Result -eq "Success") {
+                Write-Host "Game DVR disabled successfully." -ForegroundColor Green
+            }
+            else {
+                Write-Host "Failed to disable Game DVR." -ForegroundColor Red
             }
 
             Pause-App

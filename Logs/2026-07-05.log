@@ -28,3 +28,11 @@
 [2026-07-05 19:18:00] [INFO] Create Restore Point Selected
 [2026-07-05 19:18:00] [INFO] Creating restore point...
 [2026-07-05 19:18:08] [INFO] Restore point created successfully.
+[2026-07-05 19:21:11] [INFO] Application Started
+[2026-07-05 19:21:13] [INFO] Disable Game DVR Selected
+[2026-07-05 19:21:14] [INFO] Disabling Game DVR...
+[2026-07-05 19:21:14] [INFO] Game DVR disabled successfully.
+[2026-07-05 19:21:26] [INFO] Analyze PC Selected
+[2026-07-05 19:21:26] [INFO] Starting gaming analysis
+[2026-07-05 19:21:28] [INFO] Hardware info collected
+[2026-07-05 19:21:28] [INFO] Gaming analysis completed. Score: 100
