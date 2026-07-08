@@ -23,7 +23,7 @@ function Test-UltimatePerformance {
 function Get-SlxdePowerPlanGuid {
     try {
         $Plans = powercfg /list
-        $Line = ($Plans | Select-String "SLXDE PowerPlan" | Select-Object -First 1).Line
+        $Line = ($Plans | Select-String "Optimal Power Plan" | Select-Object -First 1).Line
 
         if ($Line -match '([a-fA-F0-9\-]{36})') {
             return $Matches[1]
@@ -109,7 +109,7 @@ function New-SlxdePowerPlan {
             return "Failed"
         }
 
-        powercfg -changename $Guid "SLXDE PowerPlan" "Created by Slxde Gaming Optimizer" | Out-Null
+        powercfg -changename $Guid "Optimal Power Plan" "Created by Slxde Gaming Optimizer" | Out-Null
         powercfg /setactive $Guid | Out-Null
 
         Set-SlxdePowerPlanSettings -Guid $Guid | Out-Null

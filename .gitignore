@@ -1,0 +1,17 @@
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.zip
+*.exe
+*.dll
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+Logs/
+*.log
+HKCU/
+Gui/SlxdeOptimizer.App/VERIFY_v*.txt
+Gui/SlxdeOptimizer.App/SLXDE-Gaming-Optimizer-v*/
+.vs/
+.idea/

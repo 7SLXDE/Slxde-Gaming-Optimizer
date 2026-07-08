@@ -52,7 +52,7 @@ function Backup-SlxdePowerPlan {
 
         $SlxdeGuid = $null
         $Plans = powercfg /list
-        $Line = ($Plans | Select-String "SLXDE PowerPlan" | Select-Object -First 1).Line
+        $Line = ($Plans | Select-String "Optimal Power Plan" | Select-Object -First 1).Line
 
         if ($Line -match '([a-fA-F0-9\-]{36})') {
             $SlxdeGuid = $Matches[1]
@@ -121,7 +121,7 @@ function New-SlxdeBackup {
             Created               = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
             ComputerName          = $env:COMPUTERNAME
             User                  = $env:USERNAME
-            OptimizerVersion      = "v0.8.2"
+            OptimizerVersion      = "v 0.9.65"
             BackupPath            = $BackupDir
         }
 

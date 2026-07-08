@@ -68,10 +68,10 @@ function Show-LaptopSafetyWarning {
     Write-Host "  Balanced Power Plan + Game Mode + basic cleanup"
     Write-Host ""
     Write-Host "Performance choice:" -ForegroundColor Red
-    Write-Host "  SLXDE PowerPlan + all performance tweaks"
+    Write-Host "  Optimal Power Plan + all performance tweaks"
     Write-Host ""
     Write-Host "Recommended:" -ForegroundColor Yellow
-    Write-Host "  - Use SLXDE PowerPlan only when plugged in"
+    Write-Host "  - Use Optimal Power Plan only when plugged in"
     Write-Host "  - Monitor CPU/GPU temperatures after applying tweaks"
     Write-Host "  - Switch back to Balanced if temperatures or fan noise are too high"
     Write-Host "  - Do not block vents"

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>SlxdeOptimizer.App</AssemblyName>
+    <RootNamespace>SlxdeOptimizer.App</RootNamespace>
+    <ApplicationIcon></ApplicationIcon>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Resource Include="Assets\Brand\*.png" />
+    <Resource Include="Assets\Nav\*.png" />
+    <Resource Include="Assets\Guides\AMD\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Modules\**\*">
+      <Link>Modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\GamingOptimizer.ps1" Condition="Exists('..\..\GamingOptimizer.ps1')">
+      <Link>GamingOptimizer.ps1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

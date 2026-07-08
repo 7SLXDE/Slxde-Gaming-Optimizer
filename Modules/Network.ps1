@@ -139,7 +139,7 @@ function Invoke-NetworkPack {
 function Reset-NetworkStack {
     if (!(Assert-Admin)) { return "Failed" }
 
-    # v0.8.2 safety: create a backup before grouped tweak actions where possible.
+    # v 0.9.65 safety: create a backup before grouped tweak actions where possible.
     if (Get-Command New-SlxdeBackup -ErrorAction SilentlyContinue) { New-SlxdeBackup | Out-Null }
     if (!(Confirm-Action "Reset network stack? This may remove custom network settings and needs a restart.")) { return "Cancelled" }
 
