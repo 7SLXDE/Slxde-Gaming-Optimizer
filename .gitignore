@@ -15,3 +15,6 @@ Gui/SlxdeOptimizer.App/VERIFY_v*.txt
 Gui/SlxdeOptimizer.App/SLXDE-Gaming-Optimizer-v*/
 .vs/
 .idea/
+Logs/
+*.log
+Gui/SlxdeOptimizer.App/VERIFY_v*.txt
