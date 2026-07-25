@@ -1,4 +1,4 @@
-name: Build Windows Installer
+﻿name: Build Windows Installer
 
 on:
   workflow_dispatch:
@@ -54,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $tag = $env:GITHUB_REF_NAME
-          gh release view $tag *> $null
+          cmd.exe /d /c "gh release view %GITHUB_REF_NAME% >nul 2>nul"
           if ($LASTEXITCODE -ne 0) {
             gh release create $tag --title "SLXDE OPTI $tag" --generate-notes
           }
@@ -62,3 +62,4 @@ jobs:
             ".\artifacts\installer\SLXDE-OPTI-Setup.exe" `
             ".\artifacts\installer\SLXDE-OPTI-Setup.exe.sha256" `
             --clobber
+
