@@ -1,0 +1,8 @@
+NVIDIA Profile Inspector 3.0.2.1
+Copyright (c) 2016 Orbmu2k and contributors
+Project: https://github.com/Orbmu2k/nvidiaProfileInspector
+Licence: MIT (see LICENSE.txt)
+
+SLXDE OPTI uses NVIDIA Profile Inspector as an unmodified driver-profile
+bridge. It is copied to a working folder only when the NVIDIA optimisation or
+restore action is selected.

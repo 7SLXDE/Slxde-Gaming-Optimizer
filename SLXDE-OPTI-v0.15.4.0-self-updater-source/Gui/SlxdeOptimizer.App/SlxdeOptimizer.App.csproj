@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>SlxdeOptimizer.App</AssemblyName>
+    <RootNamespace>SlxdeOptimizer.App</RootNamespace>
+    <Version>0.15.4.0</Version>
+    <AssemblyVersion>0.15.4.0</AssemblyVersion>
+    <FileVersion>0.15.4.0</FileVersion>
+    <ApplicationIcon>Assets\Brand\slxde_app_icon_v1.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Resource Include="Assets\Brand\*.png" />
+    <Resource Include="Assets\Brand\*.ico" />
+    <Resource Include="Assets\Nav\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Guides\AMD\*.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Modules\**\*">
+      <Link>Modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\GamingOptimizer.ps1" Condition="Exists('..\..\GamingOptimizer.ps1')">
+      <Link>GamingOptimizer.ps1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\Tools\NvidiaProfileInspector\**\*">
+      <Link>Tools\NvidiaProfileInspector\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>
