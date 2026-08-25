@@ -72,15 +72,26 @@ jobs:
         shell: powershell
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           [xml]$project = Get-Content -LiteralPath (Join-Path $env:ORBIT_SOURCE_ROOT "Gui\SlxdeOptimizer.App\SlxdeOptimizer.App.csproj")
           $version = [string]$project.Project.PropertyGroup.Version
           if ([string]::IsNullOrWhiteSpace($version)) { throw "Orbit Tune version is missing." }
           $tag = "v$version"
-          gh release view $tag *> $null
-          if ($LASTEXITCODE -ne 0) {
+
+          $releaseExists = $true
+          try {
+            gh release view $tag 2>$null | Out-Null
+            if ($LASTEXITCODE -ne 0) { $releaseExists = $false }
+          }
+          catch {
+            $releaseExists = $false
+          }
+
+          if (!$releaseExists) {
             gh release create $tag --title "Orbit Tune $tag" --generate-notes --latest
           }
+
           gh release upload $tag `
             (Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\installer\Orbit-Tune-Setup.exe") `
             (Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\installer\Orbit-Tune-Setup.exe.sha256") `
