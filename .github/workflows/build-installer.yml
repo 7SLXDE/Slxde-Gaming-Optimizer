@@ -1,8 +1,12 @@
-﻿name: Build Windows Installer
+name: Build and publish Orbit Tune installer
 
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/build-installer.yml"
     tags:
       - "v*"
 
@@ -14,8 +18,23 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Check out source
-        uses: actions/checkout@v4
+      - name: Download current Orbit Tune source
+        shell: powershell
+        run: |
+          $sourceZip = Join-Path $env:RUNNER_TEMP "Orbit-Tune-source.zip"
+          $sourceRoot = Join-Path $env:GITHUB_WORKSPACE "Orbit-Tune-source"
+          Invoke-WebRequest `
+            -Uri "https://orbittune.com/downloads/Orbit-Tune-v0.18.1.2-build-source.zip" `
+            -OutFile $sourceZip `
+            -UseBasicParsing
+          Expand-Archive -LiteralPath $sourceZip -DestinationPath $sourceRoot -Force
+          $project = Get-ChildItem -LiteralPath $sourceRoot -Filter "SlxdeOptimizer.App.csproj" -File -Recurse |
+            Select-Object -First 1
+          if (!$project) {
+            throw "The downloaded Orbit Tune source did not contain the app project."
+          }
+          $root = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $project.FullName))
+          "ORBIT_SOURCE_ROOT=$root" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Install .NET 8 SDK
         uses: actions/setup-dotnet@v4
@@ -26,40 +45,44 @@ jobs:
         shell: powershell
         run: choco install innosetup --no-progress -y
 
-      - name: Build installer
-        shell: powershell
-        run: .\Installer\Build-Setup.ps1
-
-      - name: Create installer checksum
+      - name: Build app, AMD bridge and installer
         shell: powershell
         run: |
-          $installer = ".\artifacts\installer\SLXDE-OPTI-Setup.exe"
-          $checksum = (Get-FileHash -LiteralPath $installer -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$checksum *SLXDE-OPTI-Setup.exe" |
-            Set-Content -LiteralPath "$installer.sha256" -Encoding ascii -NoNewline
+          Set-Location $env:ORBIT_SOURCE_ROOT
+          .\Installer\Build-Setup.ps1
+
+      - name: Verify installer contents
+        shell: powershell
+        run: |
+          $installer = Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\installer\Orbit-Tune-Setup.exe"
+          $bridge = Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\publish\Tools\AMD\OrbitTune.AmdBridge.exe"
+          if (!(Test-Path -LiteralPath $installer)) { throw "Orbit-Tune-Setup.exe was not created." }
+          if (!(Test-Path -LiteralPath $bridge)) { throw "The AMD ADLX bridge was not bundled into the published app." }
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SLXDE-OPTI-Setup
+          name: Orbit-Tune-Setup
           path: |
-            artifacts/installer/SLXDE-OPTI-Setup.exe
-            artifacts/installer/SLXDE-OPTI-Setup.exe.sha256
+            ${{ env.ORBIT_SOURCE_ROOT }}/artifacts/installer/Orbit-Tune-Setup.exe
+            ${{ env.ORBIT_SOURCE_ROOT }}/artifacts/installer/Orbit-Tune-Setup.exe.sha256
           if-no-files-found: error
 
-      - name: Attach installer to tagged GitHub release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Publish public GitHub release
         shell: powershell
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $tag = $env:GITHUB_REF_NAME
-          cmd.exe /d /c "gh release view %GITHUB_REF_NAME% >nul 2>nul"
+          [xml]$project = Get-Content -LiteralPath (Join-Path $env:ORBIT_SOURCE_ROOT "Gui\SlxdeOptimizer.App\SlxdeOptimizer.App.csproj")
+          $version = [string]$project.Project.PropertyGroup.Version
+          if ([string]::IsNullOrWhiteSpace($version)) { throw "Orbit Tune version is missing." }
+          $tag = "v$version"
+          gh release view $tag *> $null
           if ($LASTEXITCODE -ne 0) {
-            gh release create $tag --title "SLXDE OPTI $tag" --generate-notes
+            gh release create $tag --title "Orbit Tune $tag" --generate-notes --latest
           }
           gh release upload $tag `
-            ".\artifacts\installer\SLXDE-OPTI-Setup.exe" `
-            ".\artifacts\installer\SLXDE-OPTI-Setup.exe.sha256" `
+            (Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\installer\Orbit-Tune-Setup.exe") `
+            (Join-Path $env:ORBIT_SOURCE_ROOT "artifacts\installer\Orbit-Tune-Setup.exe.sha256") `
             --clobber
-
+          gh release edit $tag --latest
